@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What weekday is today?</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            max-width: 100vw;
+            flex-direction: column;
+        }
+
+        input[type="date"] {
+            padding: 5px;
+            border: 1px solid #bfbfeF;
+            border-radius: 5px;
+            width: 300px;
+            text-align: center;
+            outline: none;
+        }
+
+        div.box {
+            margin: 10px 0px;
+            padding: 10px;
+            border: 1px solid #eeaaee;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        div h4 {
+            margin: 10px 0px;
+        }
+
+        div#result {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>What weekday is today?</h2>
+    <input id="input" onchange="getWeekDay()" type="date">
+    <div class="box">
+        <h4>Result Built-in Browser</h4>
+        <div id="result-built-in">
+
+        </div>
+    </div>
+    <div class="box">
+        <h4>Result Reference Geeksforgeeks</h4>
+        <div id="result">
+
+        </div>
+        <a target="_blank" href="https://www.geeksforgeeks.org/tomohiko-sakamotos-algorithm-finding-day-week/">
+            <span>Reference:</span>
+            <b>Geeksforgeeks</b>
+        </a>
+    </div>
+    <script>
+        const INPUT = document.getElementById('input');
+        const RESULT_BUILTIN = document.getElementById('result-built-in');
+        const RESULT = document.getElementById('result');
+
+        document.addEventListener('DOMContentLoaded', () => {
+            INPUT.value = new Date().toISOString().split('T')[0];
+            getWeekDay();
+        });
+
+        function getWeekDay() {
+            day_of_the_week_builtin_browser();
+            day_of_the_week();
+        }
+
+        function day_of_the_week_builtin_browser() {
+            const [day, month, date, year] = new Date(INPUT.value).toDateString().split(' ');
+            RESULT_BUILTIN.innerHTML = `${INPUT.value}: ${month} ${date}, ${year} is ${day}`;
+        }
+
+        function day_of_the_week() {
+            const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            let [y, m, d] = INPUT.value.split('-').map(v => Number(v));
+            let t = [0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4];
+            if (m < 3) {
+                y -= 1;
+            }
+            const [_, month, date, year] = new Date(INPUT.value).toDateString().split(' ');
+            RESULT.innerHTML = `${INPUT.value}: ${month} ${date}, ${year} is ${days[Math.round((y + y / 4 - y / 100 + y / 400 + t[m - 1] + d) % 7)]}`; 
+        }
+    </script>
+</body>
+
+</html>
